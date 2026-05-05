@@ -1,12 +1,12 @@
 {
   "name": "codestable-trellis-skills",
   "version": "0.1.0",
-  "description": "CodeStable 方法论 × Trellis 基础设施 — feat-design / design-accept / knowledge-compound 三个增强 skill",
+  "description": "CodeStable 方法论 x Trellis 基础设施 — feat-design / design-accept / knowledge-compound 三个增强 skill",
   "license": "AGPL-3.0",
-  "author": "",
+  "author": "Nuanyang1905",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Nuanyang1905/codestable-trellis-skills"
   },
   "keywords": ["trellis", "codestable", "claude-code", "skill", "ai-coding", "workflow"],
   "bin": {
