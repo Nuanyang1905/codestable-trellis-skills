@@ -61,9 +61,16 @@ Read `design.md` and `checklist.yaml`. For each check item in checklist.yaml, ve
 - 正常场景：{N}/{M} 通过
 - 边界场景：{N}/{M} 通过
 - 反向核对：{N}/{M} 通过
+- 架构归并：{完成/跳过}（{具体说明}）
 
 ## 逐条结果
 {上面的逐条核对结果}
+
+## 架构归并
+{0.5 节的归并结果}
+- [ ] 架构文档 X（{路径}）：归并内容 {描述}；已写入 / 不需要（理由）
+- [ ] 架构总入口更新：已处理 / 不需要
+**判据验证**：没读过 design 的人打开 architecture 能知道系统里现在有这个能力。
 
 ## 遗留
 {未通过的项、原因、后续计划}
@@ -73,8 +80,54 @@ Read `design.md` and `checklist.yaml`. For each check item in checklist.yaml, ve
 
 把 `checklist.yaml` 中所有 `checks` 的状态更新：通过 → `passed`，未通过 → `failed`。
 
-All checks passed → 报告完成，继续 Step 1（代码质量检查）。
+All checks passed → 报告完成，继续 Step 0.5（架构归并）。
 有 failed → 先修代码，修完后重新跑 Step 0，直到全部 passed。
+
+---
+
+### 0.5 Architecture Merge-Back（架构归并）
+
+验收通过后、代码质量检查前，把本次 feature 中稳定、系统级可见的内容**实际写入**架构文档。不是加个 design 链接就算数——没读过 design 的人打开 architecture 应该能知道"系统里现在有这个能力、大致形态、交互约束"。
+
+#### 0.5.1 判断是否需要归并
+
+检查 design.md 中是否涉及以下内容（一般在 design 的第 4 节或"影响范围"段落）：
+- 新增模块/子系统
+- 新增或修改的接口/数据契约
+- 跨模块的流程或编排变化
+- 新的流程级约束（错误语义、幂等性、并发、扩展点）
+
+没有则跳过，写"本次无架构维度变更"并继续 Step 1。
+
+#### 0.5.2 三类归并
+
+**名词归并**（新增/变化的实体、类型、对外契约）：
+```bash
+# 找到相关 spec 文件
+ls .trellis/spec/<package>/
+```
+把 design 中定义的新实体、接口签名、数据结构写入对应的 spec 文件。
+
+**动词骨架归并**（跨模块可见的主流程/关键编排）：
+- 技术角色 design 在第 2.2 节有编排图/流程图 → 把图中新增的模块交互关系写入架构文档的结构图或模块交互节
+- 非技术角色 design 无流程图 → 从挂载点（第 2.3 节）和推进顺序（第 2.4 节）反推受影响的功能区域，写入架构文档
+
+**流程级约束归并**（跨 feature 稳定的约束）：
+design 中声明的幂等性要求、并发限制、错误语义等，写入架构文档的"已知约束"节。
+
+#### 0.5.3 写入规范
+
+```
+逐项核对：
+- [ ] 架构文档 {路径}：归并内容 {描述}；已写入 / 不需要（理由：{具体}）
+- [ ] 架构总入口是否需要新增描述
+```
+
+**判据**：归并完成后，没读过 design 的人打开 architecture 应该知道"系统里现在有这个能力"。
+
+#### 0.5.4 写入 acceptance.md
+
+归并结果写入验收报告第 5 节（见 0.3 模板中追加的第 5 节）。
 
 ---
 
@@ -121,9 +174,10 @@ Run the project's lint, type-check, and test commands. Fix any failures before p
 
 ### Spec Sync
 
-- [ ] Does `.trellis/spec/` need updates? (new patterns, conventions, lessons learned)
-
-> "If I fixed a bug or discovered something non-obvious, should I document it so future me won't hit the same issue?" → If YES, update the relevant spec doc.
+- [ ] Does `.trellis/spec/` need updates?
+  - **踩坑经验/好做法** → 提醒用户走 `trellis-compound`
+  - **编码规范/接口契约变更** → 提醒用户走 `trellis-update-spec`
+  - 纯粹实现细节 → 跳过
 
 ## Step 5: Cross-Layer Dimensions (if applicable)
 
@@ -159,3 +213,5 @@ Skip this step if your change is confined to a single layer.
 ## Step 6: Report and Fix
 
 Report violations found and fix them directly. Re-run project checks after fixes.
+
+完成后问一句：**"这次有没有踩坑或发现好做法值得记下来？"** 用户说"有" → 走 `trellis-compound`；说"不用" → 跳过。

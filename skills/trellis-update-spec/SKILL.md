@@ -1,77 +1,15 @@
 ---
 name: trellis-update-spec
-description: "Captures executable contracts and coding conventions into .trellis/spec/ documents. Use when learning something valuable from debugging, implementing, or discussion that should be preserved for future sessions."
+description: "Update coding standards and executable contracts in .trellis/spec/ — signatures, validation matrices, error behavior, conventions. Use when implementing features, fixing bugs, or establishing patterns that future AI needs to follow."
 ---
 
-# Update Code-Spec - Capture Executable Contracts
+# Update Code-Spec — 编码规范与契约更新
 
-When you learn something valuable (from debugging, implementing, or discussion), use this to update the relevant code-spec documents.
+把实现过程中学到的编码规范、接口契约、错误行为、项目约定写入 `.trellis/spec/`，让未来的 AI 和开发者不会重复踩坑。
 
-**Timing**: After completing a task, fixing a bug, or discovering a new pattern
+> **知识沉淀（踩坑经验 / 好做法）走另一个 skill**：说「把这个坑记下来」→ 走 `trellis-compound`。本 skill 只管编码规范。
 
----
-
-## Knowledge Compound（知识沉淀 — 优先）
-
-Spec 记录的是"怎么做"，**不记录"踩了什么坑"和"发现了什么更好的做法"**。没有沉淀的项目总在重复踩同一个坑。
-
-在做 Code-Spec 更新之前，先判断这次学到的东西是否属于知识沉淀。
-
-### 两条轨道
-
-| 轨道 | 记录什么 | 示例 |
-|------|---------|------|
-| **坑点（pitfall）** | 调过的 bug / 绕过的配置陷阱 / 环境问题 / 集成失败 | "改了 A 文件的类型定义，B 文件的测试全部挂掉，因为 mock 数据没同步" |
-| **好做法（knowledge）** | 最佳实践 / 工作流改进 / 可复用模式 | "表单验证应该在前端和后端各做一遍，只做一端会漏" |
-
-### 沉淀流程
-
-#### Step K1：识别
-从对话上下文提取：
-- 来源：feature 工作流 / bug 修复 / 独立发现
-- 粗分轨道：坑点 or 好做法。两者都有就分两条
-
-#### Step K2：查重（必做）
-在 `.trellis/spec/` 下搜索是否已有类似记录：
-```bash
-grep -r "<关键词>" .trellis/spec/
-```
-
-发现重叠时：
-- 内容需要补充 → **更新旧文档**，在末尾加 `> 更新于 YYYY-MM-DD：{新增内容}`
-- 内容已被覆盖 → 不重复写，告诉用户"这条已记录在 {路径}"
-- 内容冲突 → 列出来让用户裁决
-
-#### Step K3：提炼（一次一个问题）
-- 坑点：现象是什么 → 试过哪些解法没用 → 最终怎么发现的 → 下次怎么更早发现
-- 好做法：在什么场景下有用 → 不这样做会出什么问题 → 有没有不适用的反例
-
-用户对某问题说"没什么"就跳过，不硬填。
-
-#### Step K4：起草 + 用户确认
-一次性起草完整内容（YAML frontmatter + 正文），一次性展示给用户确认。
-
-#### Step K5：落盘
-写入 `.trellis/spec/guides/compound.md`（追加模式，每条新记录一个 `###` 小节）：
-
-```markdown
-### {日期} - {轨道：坑点/好做法} - {一句话标题}
-
-**轨道**：坑点 / 好做法
-**日期**：YYYY-MM-DD
-**关联**：{相关 task/feature}
-
-**现象/场景**：{描述}
-
-**根因/原理**：{为什么}
-
-**解法/做法**：{怎么做}
-
-**下次怎么发现**：{预防措施}
-```
-
-#### Step K6：可发现性检查
-写完检查 `AGENTS.md` 或 `.claude/` 下有没有指引 AI 查阅 compound 记录。没有就提示用户加一行——不自作主张。
+**触发时机**：完成 feature、修复 bug、发现新模式或约定
 
 ---
 
@@ -107,16 +45,6 @@ For triggered tasks, include all sections below:
 
 ## When to Update
 
-### Proactive Reminder（主动提醒）
-
-以下时机**必须**主动提醒用户记录，用户说"不用"立刻跳过：
-
-| 时机 | 提醒语 |
-|------|--------|
-| trellis-check 验收完成 | "这次开发中有没有踩到什么坑、或者发现什么好做法值得记下来？" |
-| 修了一个非显而易见的 bug | "这个 bug 的根因和解决过程要不要沉淀一下？下次免得再踩。" |
-| 用户说"终于搞定了/原来是这样" | "听起来是个值得记下来的发现，要记吗？" |
-
 ### Update Triggers
 
 | Trigger | Example | Target |
@@ -125,7 +53,7 @@ For triggered tasks, include all sections below:
 | **Made a design decision** | Chose extensibility pattern over simplicity | Relevant spec + "Design Decisions" section |
 | **Fixed a bug** | Found a subtle issue with error handling | Relevant spec (e.g., error-handling docs) |
 | **Discovered a pattern** | Found a better way to structure code | Relevant spec file |
-| **Hit a gotcha** | Learned that X must be done before Y | Knowledge compound (坑点轨道) |
+| **Hit a gotcha** | Learned that X must be done before Y | `trellis-compound`（知识沉淀，非本 skill） |
 | **Established a convention** | Team agreed on naming pattern | Quality guidelines |
 | **New thinking trigger** | "Don't forget to check X before doing Y" | `guides/*.md` (as a checklist item) |
 
@@ -417,8 +345,9 @@ Development Flow:
 ```
 
 - `/trellis:break-loop` - Analyzes bugs deeply, often reveals spec updates needed
-- `/trellis:update-spec` - Actually makes the updates
+- `/trellis:update-spec` - Actually makes the spec updates
 - `/trellis:finish-work` - Reminds you to check if specs need updates
+- `/trellis:compound` - 知识沉淀（坑点/好做法）—— 跟本 skill 互补，不重叠
 
 ---
 

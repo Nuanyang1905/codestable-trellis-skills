@@ -12,7 +12,7 @@ Trellis 原生的流程是 `brainstorm → PRD → implement → check`。中间
 
 ```
 Trellis 原生：  brainstorm → PRD → 写代码 → check(代码质量)
-加上这个包：    brainstorm → PRD → 📐设计 → 写代码 → ✅验收+检查 → 📝沉淀经验
+加上这个包：    brainstorm → PRD → 📐设计 → 写代码 → ✅验收 → 🏗️架构归并 → 🔍代码质量 → 📝沉淀经验
 ```
 
 ## 包含的 Skill
@@ -26,21 +26,31 @@ Trellis 原生：  brainstorm → PRD → 写代码 → check(代码质量)
 - 怎么算做对了（可观察的成功标准）
 - 明确不做什么
 - 边界和出错时怎么办
+- **动笔前扫已有 spec/compound 防术语冲突和重复发明**
 
 产出 `design.md` + `checklist.yaml`。用户确认后 AI 才动手写代码。
 
 ### 2. trellis-check（增强）
 
 原有功能：代码质量检查（lint / typecheck / test）。
-新增功能：**先做设计验收**。有 design.md 时，先对照 checklist 逐条核对实现，前端改动必须浏览器跑过，再写入 `acceptance.md` 验收报告。
-
-### 3. trellis-update-spec（增强）
-
-原有功能：把新发现写进 spec。
 新增功能：
+- **先做设计验收**：有 design.md 时，对照 checklist 逐条核对实现，前端改动必须浏览器跑过，再写入 `acceptance.md` 验收报告
+- **架构归并**：验收通过后，把 feature 新增的模块/接口/约束实际写回 `.trellis/spec/` 架构文档，让下一个 feature 不重新发明轮子
+
+### 3. trellis-compound（新增 — 知识沉淀）
+
+从 `trellis-update-spec` 拆分出的独立 skill：
+
 - **坑点/好做法双轨沉淀**：踩过的坑和发现的更好的做法分开记录
 - **查重防重复**：写之前先搜已有记录，重叠就更新旧文档不新建
 - **主动提醒**：任务完成后主动问"有值得记下来的吗？"
+
+### 4. trellis-update-spec（精简）
+
+原有功能保留，去掉知识沉淀部分，**专注编码规范与契约更新**：
+- 接口签名、契约、错误矩阵
+- 项目约定、设计决策、禁止模式
+- 踩坑经验沉淀 → 请走 `trellis-compound`
 
 ## 安装
 
@@ -57,9 +67,10 @@ npx github:Nuanyang1905/codestable-trellis-skills
 
 | 你说 | AI 做 |
 |------|------|
-| "开始设计方案" | 读 PRD → 写你看得懂的 design.md → 等你确认 |
-| "检查一下代码" | 先对照 design 验收 → 再做代码质量检查 |
-| "把这个坑记下来" | 分类（坑点/好做法）→ 查重 → 沉淀到 spec |
+| "开始设计方案" | 读 PRD → 扫已有 spec/compound 防冲突 → 写你看得懂的 design.md → 等你确认 |
+| "检查一下代码" | 先对照 design 验收 → 架构归并到 spec → 再做代码质量检查 |
+| "把这个坑记下来" | 分类（坑点/好做法）→ 查重 → 沉淀到 compound.md |
+| "更新规范" | 更新 spec 中的签名/契约/错误矩阵/约定 |
 
 ## 许可
 

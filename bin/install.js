@@ -9,6 +9,7 @@ const skills = [
   "trellis-feat-design",
   "trellis-check",
   "trellis-update-spec",
+  "trellis-compound",
 ];
 
 console.log("  CodeStable × Trellis 技能包");
@@ -49,5 +50,6 @@ console.log(`完成！新增 ${installed} 个 skill，更新 ${updated} 个。`)
 console.log("");
 console.log("现在你可以用：");
 console.log("  说「开始设计方案」→ trellis-feat-design");
-console.log("  说「检查代码」   → trellis-check (含设计验收)");
-console.log("  说「记下来」     → trellis-update-spec (含知识沉淀)");
+console.log("  说「检查代码」   → trellis-check (含设计验收 + 架构归并)");
+console.log("  说「记下来」     → trellis-compound (坑点/好做法双轨沉淀)");
+console.log("  说「更新规范」   → trellis-update-spec (编码规范更新)");
