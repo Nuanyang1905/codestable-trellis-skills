@@ -1,0 +1,21 @@
+{
+  "name": "codestable-trellis-skills",
+  "version": "0.1.0",
+  "description": "CodeStable 方法论 × Trellis 基础设施 — feat-design / design-accept / knowledge-compound 三个增强 skill",
+  "license": "AGPL-3.0",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": ["trellis", "codestable", "claude-code", "skill", "ai-coding", "workflow"],
+  "bin": {
+    "codestable-trellis": "./bin/install.js"
+  },
+  "files": [
+    "skills/",
+    "bin/",
+    "LICENSE",
+    "README.md"
+  ]
+}
