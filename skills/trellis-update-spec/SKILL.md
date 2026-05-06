@@ -359,3 +359,13 @@ The goal is **institutional memory**:
 - What one person learns, everyone benefits from
 - What AI learns in one session, persists to future sessions
 - Mistakes become documented guardrails
+
+---
+
+## 快速路由
+
+| 你想做的事 | 走哪个 skill |
+|-----------|-------------|
+| 记录踩过的坑、发现的好做法 | `trellis-compound` |
+| 更新编码规范、接口契约、错误矩阵 | 本 skill（trellis-update-spec） |
+| 不确定？ | 问自己：这条信息更接近"怎么避免犯同一个错"（→ compound）还是"代码该怎么写"（→ update-spec） |

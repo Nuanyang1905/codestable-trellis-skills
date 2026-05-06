@@ -15,15 +15,26 @@ Before running code quality checks, check if a design document exists for the cu
 
 ### 0.1 Locate Design Artifacts
 
+先尝试用 task.py 获取当前活跃 task：
+
 ```bash
 python ./.trellis/scripts/task.py current --source 2>/dev/null
 ```
 
-If there is an active task, look for:
+**Fallback**：如果上述命令无输出（没有活跃 session 或 task.py 不可用），用以下方式查找：
+
+```bash
+# 找最近修改的非 archive task 目录
+ls -lt .trellis/tasks/ | grep "^d" | grep -v archive | head -3
+```
+
+对每个候选目录检查是否存在 `design.md` + `checklist.yaml`。存在即采用，不存在则继续查下一个。
+
+If there is an active task (or fallback found one), look for:
 - `.trellis/tasks/{task}/design.md`
 - `.trellis/tasks/{task}/checklist.yaml`
 
-If neither exists, skip to Step 1 (standard code quality check).
+If neither exists after trying all candidates, skip to Step 1 (standard code quality check).
 
 ### 0.2 Run Design Acceptance
 
@@ -44,10 +55,21 @@ Read `design.md` and `checklist.yaml`. For each check item in checklist.yaml, ve
 - [ ] REV-1: {明确不做的事项} → 验证方式：grep/代码审查 → 结果：通过/未通过
 ```
 
+**挂载点反向核对（必须实际 grep + 沙盘推演）**：
+
+对 design.md 第 2.3 节的每个挂载点：
+```bash
+grep -rn "<挂载点关键词>" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --include="*.py" --include="*.go" src/ app/ lib/ 2>/dev/null
+```
+
+沙盘推演：假设删掉这个挂载点对应的代码 → feature 在用户视角是否消失了？
+- 是 → 挂载点正确，继续
+- 否 → 挂载点遗漏或多列，修正 design.md 或补充遗漏的挂载点
+
 **验收原则**：
 - 发现偏差 → **先修代码**，不是只在报告里记一笔
 - 前端改动必须浏览器肉眼验证，typecheck 通过不代表用户用起来对
-- 反向核对必须实际 grep，不能凭印象勾选
+- 反向核对必须实际 grep + 沙盘推演，不能凭印象勾选
 
 ### 0.3 Write Acceptance Report
 

@@ -75,7 +75,21 @@ grep -r "<关键词>" .trellis/spec/guides/compound.md .trellis/spec/
 
 ### Step 5：落盘
 
-写入 `.trellis/spec/guides/compound.md`（追加模式）：
+写入 `.trellis/spec/guides/compound.md`：
+
+**首次初始化**（文件不存在时）：
+先创建文件，写入头部：
+```markdown
+# Compound — 知识沉淀
+
+> 双轨记录：坑点（pitfall）与好做法（knowledge）。每次踩坑或发现更优做法时追加。
+
+---
+
+```
+
+**追加模式**（文件已存在时）：
+在文件末尾追加新记录：
 
 ```markdown
 ### {日期} - {坑点/好做法} - {一句话标题}
@@ -93,9 +107,30 @@ grep -r "<关键词>" .trellis/spec/guides/compound.md .trellis/spec/
 **下次怎么发现**：{预防措施}
 ```
 
+**更新已有记录**（查重发现重叠，补充而非新建）：
+在原记录的末尾追加一行：
+```markdown
+> 更新于 YYYY-MM-DD：{新增内容，如"补充了 XX 场景下的反例"}
+```
+同时在原记录的 frontmatter 区（或标题行）确认日期字段保持原始日期不变——`updated` 行自身记录了更新时间线。
+
 ### Step 6：可发现性检查
 
-写完检查 `AGENTS.md` 或 `.claude/` 下有没有指引 AI 查阅 compound 记录。没有就提示用户加一行——不自作主张改文件。
+写完检查 `AGENTS.md` 或项目根目录下的 AI 指引文件有没有提到 compound 知识库。
+
+如果**没有**，给出以下建议（不自作主张改文件）：
+
+> 建议在 `AGENTS.md` 中加一行：
+> ```
+> - 踩坑经验和好做法记录在 `.trellis/spec/guides/compound.md`，写代码前 grep 相关关键词避免重蹈覆辙
+> ```
+
+如果 `AGENTS.md` 不存在，建议：
+> 建议创建 `AGENTS.md`，至少包含：
+> ```markdown
+> - 编码规范：.trellis/spec/
+> - 历史经验（坑点与好做法）：.trellis/spec/guides/compound.md
+> ```
 
 ---
 
